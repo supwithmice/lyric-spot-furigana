@@ -1,6 +1,6 @@
 # set up flask and socketio
 print("initializing... do not visit the web UI")
-import logging, os, configparser, time, libraries.spotifyApiHelpers as spotifyApiHelpers, libraries.webUiHelpers as webUiHelpers, sys, threading, socket; from datetime import datetime; from flask import Flask, render_template, jsonify, request, redirect, url_for, render_template_string; from flask_socketio import SocketIO; from lyricsgenius import Genius; 
+import logging, os, configparser, time, libraries.spotifyApiHelpers as spotifyApiHelpers, libraries.webUiHelpers as webUiHelpers, sys, threading, socket; from datetime import datetime; from flask import Flask, render_template, jsonify, request, redirect, url_for, render_template_string; from flask_socketio import SocketIO; from lyricsgenius import Genius; import libraries.furiganize as furiganize;
 app = Flask(__name__)
 app.logger.disabled = True
 logging.getLogger('werkzeug').disabled = True
@@ -77,7 +77,7 @@ def lyricsLoop():
                     # format lyrics if there are any
                     if not error:
                         lyrics = webUiHelpers.formatGeniusLyrics(lyrics, artist)
-                        
+                        lyrics = furiganize.getFurigana(lyrics)
                         # check if cache limit is being reached
                         cache = os.listdir("files/cache")
                         path = ["files/cache/{0}".format(x) for x in cache]
